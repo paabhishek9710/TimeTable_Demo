@@ -1,0 +1,78 @@
+import random
+
+
+# matrx dynamically creates matrices
+# class Scheduler:
+def randomizER(exclude):
+    r = None
+    while r in exclude or r is None:
+        r = random.randrange(0,8)
+    return r
+
+
+def matrx(row, column):
+    n, m = row, column  # the lines 4 to 6 dynamically creates a matrix
+    pip = [0] * n
+    for x in range(n):
+        pip[x] = [0] * m
+    return pip  # returns the array pip and stores in the variable used
+
+
+# matrxLVL2 inputs values for each element
+def matrxLVL2(matrix, row, column):
+    pip = matrix
+    n, m = row, column
+    for a in range(0, n):
+        for b in range(0, m):
+            pip[a][b] = input()
+            if pip[a][b].isdigit():
+                pip[a][b] = int(pip[a][b])
+        print("\n Prepare the next entry.")
+    return pip
+
+
+scheduLED = 0
+
+
+def scheduLER(data, outputt):
+    while (scheduLED == 0):
+        for a in range(0, 9):
+            lecture = data[a][0]
+            type = data[a][1]
+            professor = data[a][2]
+            lectureS = data[a][3]
+            while (lectureS != 0):
+                for day in range(0, 12, 2):
+                    p = randomizER([4])
+                    if outputt[day][p] == 0:
+                        if type == 'Lecture':
+                            outputt[day][p] = lecture
+                            outputt[day + 1][p] = professor
+                            lectureS = lectureS - 1
+                        if (type == 'Lab' and p<7):
+                            outputt[day][p] = lecture
+                            outputt[day][p + 1] = lecture
+                            outputt[day + 1][p] = professor
+                            outputt[day + 1][p + 1] = professor
+                            lectureS = lectureS - 1
+    return outputt
+
+
+print("Enter the Lecture name, 'Lab' or 'Lecture' only, Professor's name and number of lectures per week.")
+print("Rules: Strictly Lab or Lecture; and for Lab, lecture is 1 and for Lecture, it is either 1,6 or 5,")
+pinger = int(input("Enter Total types of lectures :"))
+pinger=pinger-1
+lectureType = matrx(pinger, 4)
+lectureType = matrxLVL2(lectureType, pinger, 4)
+# 9 rows for "pinger" lectures and first column for Lecture name, second for lecture type,
+# third for Professor name and fourth for number of lectures per week
+
+timeTable = matrx(12, 9)
+for day in range(10, 12):
+    for lectureD in range(3, 8):
+        if lectureD in [3, 5, 6, 7]:
+            timeTable[day][lectureD] = "N.P"
+# 12 rows for 6 clg days displaying lecture name plus Professor associated with it
+# and 9 columns for 8 lectures plus 5th column for Recess visual
+timeTable=scheduLER(lectureType,timeTable)
+print(timeTable)
